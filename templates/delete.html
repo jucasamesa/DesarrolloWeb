@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Eliminacion de Registro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link href="../static/css/templates.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <h3>Eliminar Registro de la Lista</h3>
+
+<form  method="POST" action="{{url_for('delete')}}">
+    {{delete_form.csrf_token}}
+    Id del Usuario {{delete_form.userid}}
+    {{delete_form.deletebtn(class_="Button2")}}
+
+</form>
+
+</body>
+</html>

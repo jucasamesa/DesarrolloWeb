@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>List</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link href="../static/css/templates.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<h3>Informacion de usuarios</h3>
+<table border=2>
+    <thead>
+        <td>ID</td>
+        <td>Usuario</td>
+        <td>Nombre</td>
+        <td>Correo</td>
+        <td>Telefono</td>
+        <td>Fecha</td>
+        <td>Link Foto de Perfil</td>
+    </thead>
+    {% for row in rows %}
+        <tr>
+            <td>{{row["id"]}}</td>
+            <td>{{row["usuario"]}}</td>
+            <td>{{row["nombre"]}}</td>
+            <td>{{row["correo"]}}</td>
+            <td>{{row["telefono"]}}</td>
+            <td>{{row["date"]}}</td>
+            <td>{{row["link_user"]}}</td>
+        </tr>   
+    {% endfor %}   
+</table>
+
+<br><br>
+
+<a href="/index">Ir a la pagina de administración</a>
+
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Signup</title>
+<link href="../static/css/templates.css" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+</head>
+
+<div class="center"> 
+<table width="900" border="0">
+  <tbody>
+    <tr>
+      <td>
+	 	<img src="../static/Images/logo.png" width="400" height="400" alt=""/>
+	  </td>
+   	  <td>
+		  <form method="POST" action="{{url_for('signup')}}">
+			  {{signup_form.csrf_token}}
+			  <p>Usuario<br>{{signup_form.username}}</p>
+			  <p>Nombre<br>{{signup_form.name}}</p>
+			  <p>Contraseña<br>{{signup_form.password}}</p>
+			  <p>Repetir Contraseña<br>{{signup_form.repassword}}</p>
+			  <p style="color: red; font-size: 12px;">
+				{% for error in signup_form.password.errors %}
+				{{ error }}
+				{% endfor %}
+			  </p>
+			  <p>Correo Electronico<br>{{signup_form.email}}</p>
+			  <p>Telefono<br>{{signup_form.telefono}}</p>
+			  <p>Fecha de Nacimiento<br>{{signup_form.born}}</p><p style="color: red; font-size: 12px;">
+				{% for error in signup_form.born.errors %}
+				{{ error }}
+				{% endfor %}
+			  </p>
+		  
+	  	</td>
+	  
+		<td>
+			<div class="container"><img id="imgperfil" src="../static/Images/logo.png" width="200" height="200" alt="" class="imgRedonda"/>
+			<div class="centered">+ Añadir Imagen</div>
+			</div>
+		  <div class="container" style="margin-top: 260px">
+		    {{signup_form.nextbtn(class_="Button2")}}
+	      </div>
+		</form></td>
+    </tr>
+  </tbody>
+</table>	
+</div>
+<body>
+<footer id="footer" align="center">Photogram, Derechos reservados ® 2020</footer>
+</body>
+</html>
