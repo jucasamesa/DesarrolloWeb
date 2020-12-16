@@ -94,18 +94,12 @@ def login():
                             con = sqlite3.connect('BaseDatos.db')
                             cur = con.cursor()
                             print("Connected to SQLite")
-
-                            cur.execute("SELECT password FROM usuarios WHERE usuario = '" + usuario + "' ")
-                            records = cur.fetchall()
-                            print("Total rows are:  ", len(records))
-                            print("Printing each row")
-                            for row in records:
-                                print("password: ", row[0])
-                                temp = row[0]
-                                
+                            cur.execute("SELECT password FROM usuarios WHERE usuario = ? AND password = ?",(usuario,contraseña))
+                            temp = cur.fetchone()[0]
+                            print("La contraseña guardada del usuario "+usuario+" es:" + temp + " y la contraseña escrita es: "+ contraseña)                                
                             if temp == contraseña:
                                 return redirect('main') 
-                            
+                           
                             cur.close()
                         
                         except sqlite3.Error as error:
@@ -167,7 +161,7 @@ def signup():
                         cur = con.cursor()
                         print("Connected to SQLite")
 
-                        cur.execute("SELECT DISTINCT usuario FROM usuarios WHERE usuario = '"+usuario+"'")
+                        cur.execute("SELECT DISTINCT usuario FROM usuarios WHERE usuario = ?", (usuario,))
                         records = cur.fetchall()
                         print("Total rows are:  ", len(records))
                         print("Printing each row")
@@ -219,7 +213,7 @@ def delete():
                 con = sqlite3.connect("BaseDatos.db")
                 try:
                     cur=con.cursor()
-                    cur.execute("DELETE FROM usuarios where id = ?", userid)
+                    cur.execute("DELETE FROM usuarios where id = ?", (userid,))
                     con.commit()
                     msg = "Registro eliminado exitosamente"
                 except:
@@ -252,10 +246,6 @@ def edit():
 @app.route('/admin')
 def admin():
     return render_template('admin.html')       
-
-
-
-
 
 if __name__=="__main__":
     app.run(debug=True)   
