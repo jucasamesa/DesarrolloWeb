@@ -72,39 +72,6 @@ def forgot():
 
     return render_template('forgot.html')
 
-'''def reverse_password(usuario):
-    
-    con = sqlite3.connect('BaseDatos.db')
-    cur = con.cursor()
-    print("Connected to SQLite")
-    cur.execute("SELECT DISTINCT password FROM usuarios WHERE usuario = ?", [usuario])
-    records = cur.fetchall()
-    print("Total rows are:  ", len(records))
-    print("Printing each row")
-    temp = ""
-    for row in records:
-        print("Usuario: ", row[0])
-        temp = row[0]
-    #check_password_hash    
-    if temp == usuario:
-        flash("El usuario ya existe")
-        cur.close()
-    else:
-        print("Entro al else")
-        cur.execute("INSERT into usuarios (usuario,nombre,password,correo,telefono,date,link_user,rol) values (?,?,?,?,?,?,?,?)",[usuario,nombre,clavehash,correo,telefono,date,link_user,rol])
-        con.commit()
-        session["usuario"] = usuario 
-        return redirect('main')        
-
-except sqlite3.Error as error:
-    print("Failed to read data from table", error)
-
-finally:
-    if (con):
-        con.close()
-        print("The Sqlite connection is closed")'''
-
-
 @app.route('/login',methods=["GET","POST"])
 def login():
     login_form = Login_Form()
@@ -117,20 +84,18 @@ def login():
                     password= login_form.password.data
                                                                
                     if usuario !="" and password !="":
-                        
+                               
                         try:
                             con = sqlite3.connect('BaseDatos.db')
                             cur = con.cursor()
                             print("Connected to SQLite")
                             
-                            cur.execute("SELECT password,rol FROM usuarios WHERE usuario = ? AND password = ?",[usuario,password])
+                            cur.execute("SELECT password,rol FROM usuarios WHERE usuario = ? ",[usuario])
                             records = cur.fetchall()
                             size = len(records)
                             print("Total rows are:  ", size)
                             print("Printing each row")
                             
-                            #pass2 = generate_password_hash(password)
-                            #print(pass2)
                             if size == 0:
                                 flash("Usuario o contraseña incorrectos") 
                             else:
@@ -139,9 +104,10 @@ def login():
                                     print("rol: ", row[1])
                                     temp = row[0]
                                     rol = row[1]
-                                if temp == password:    
-                                #if temp == check_password_hash(temp,password):
-                                #if temp == pass2:
+                                    print(check_password_hash(temp,password))
+                                
+                                if check_password_hash(temp,password) is True:
+                                
                                     session["usuario"] = usuario 
                                     if rol == "admin":
                                         return redirect('admin')
