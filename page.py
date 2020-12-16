@@ -1,4 +1,4 @@
-from flask import Flask , render_template, request, redirect, flash, url_for
+from flask import Flask , render_template, request, redirect, flash, url_for, session
 from flask_wtf import FlaskForm , Form
 from wtforms.fields.html5 import DateField, EmailField, TelField
 from wtforms import StringField,PasswordField,SubmitField,validators,IntegerField
@@ -7,6 +7,7 @@ import yagmail as yagmail
 import os
 import sqlite3 
 from sqlite3 import Error
+from werkzeug.security import generate_password_hash , check_password_hash
 
 app= Flask(__name__)
 app.secret_key=os.urandom(24)
@@ -33,9 +34,6 @@ class Signup_Form(FlaskForm):
 class Delete_Form(FlaskForm):
     userid= StringField('userid',validators=[validators.DataRequired(message="Id de usuario Requerido")]) 
     deletebtn= SubmitField('Borrar Usuario')
-
-
-
 
 
 @app.route('/',methods=["GET","POST"])
@@ -74,6 +72,39 @@ def forgot():
 
     return render_template('forgot.html')
 
+'''def reverse_password(usuario):
+    
+    con = sqlite3.connect('BaseDatos.db')
+    cur = con.cursor()
+    print("Connected to SQLite")
+    cur.execute("SELECT DISTINCT password FROM usuarios WHERE usuario = ?", [usuario])
+    records = cur.fetchall()
+    print("Total rows are:  ", len(records))
+    print("Printing each row")
+    temp = ""
+    for row in records:
+        print("Usuario: ", row[0])
+        temp = row[0]
+    #check_password_hash    
+    if temp == usuario:
+        flash("El usuario ya existe")
+        cur.close()
+    else:
+        print("Entro al else")
+        cur.execute("INSERT into usuarios (usuario,nombre,password,correo,telefono,date,link_user,rol) values (?,?,?,?,?,?,?,?)",[usuario,nombre,clavehash,correo,telefono,date,link_user,rol])
+        con.commit()
+        session["usuario"] = usuario 
+        return redirect('main')        
+
+except sqlite3.Error as error:
+    print("Failed to read data from table", error)
+
+finally:
+    if (con):
+        con.close()
+        print("The Sqlite connection is closed")'''
+
+
 @app.route('/login',methods=["GET","POST"])
 def login():
     login_form = Login_Form()
@@ -83,27 +114,44 @@ def login():
             if login_form.is_submitted():
                 if login_form.loginbtn.data and login_form.validate(): 
                     usuario= login_form.username.data
-                    contraseña= login_form.password.data
-                    
-                    if usuario =="" or contraseña=="":
-                        flash("Verifique campos ingresados")
-                    
-                    if usuario !="" and contraseña !="":
+                    password= login_form.password.data
+                                                               
+                    if usuario !="" and password !="":
                         
                         try:
                             con = sqlite3.connect('BaseDatos.db')
                             cur = con.cursor()
                             print("Connected to SQLite")
-                            cur.execute("SELECT password FROM usuarios WHERE usuario = ? AND password = ?",(usuario,contraseña))
-                            temp = cur.fetchone()[0]
-                            print("La contraseña guardada del usuario "+usuario+" es:" + temp + " y la contraseña escrita es: "+ contraseña)                                
-                            if temp == contraseña:
-                                return redirect('main') 
-                           
-                            cur.close()
-                        
+                            
+                            cur.execute("SELECT password,rol FROM usuarios WHERE usuario = ? AND password = ?",[usuario,password])
+                            records = cur.fetchall()
+                            size = len(records)
+                            print("Total rows are:  ", size)
+                            print("Printing each row")
+                            
+                            #pass2 = generate_password_hash(password)
+                            #print(pass2)
+                            if size == 0:
+                                flash("Usuario o contraseña incorrectos") 
+                            else:
+                                for row in records:
+                                    print("password: ", row[0])
+                                    print("rol: ", row[1])
+                                    temp = row[0]
+                                    rol = row[1]
+                                if temp == password:    
+                                #if temp == check_password_hash(temp,password):
+                                #if temp == pass2:
+                                    session["usuario"] = usuario 
+                                    if rol == "admin":
+                                        return redirect('admin')
+                                    else:
+                                        return redirect('main') 
+                                    cur.close()                            
+
                         except sqlite3.Error as error:
                             print("Failed to read data from table", error)
+                        
                         finally:
                             if (con):
                                 con.close()
@@ -111,8 +159,7 @@ def login():
                        
                     else:
                         flash("Usuario o contraseña invalidos")    
-                                     
-         
+                                  
         return render_template('login.html',login_form = login_form, register_form=register_form)         
 
     except:
@@ -137,8 +184,6 @@ def register():
     except:
         return render_template('login.html',login_form = login_form, register_form=register_form)
 
-
-
 @app.route('/signup',methods=["GET","POST"])
 def signup():
    
@@ -151,6 +196,7 @@ def signup():
                         usuario = signup_form.username.data
                         nombre = signup_form.username.data
                         password = signup_form.password.data
+                        clavehash = generate_password_hash(password)
                         correo = signup_form.email.data
                         telefono = signup_form.telefono.data
                         date = signup_form.born.data
@@ -161,7 +207,7 @@ def signup():
                         cur = con.cursor()
                         print("Connected to SQLite")
 
-                        cur.execute("SELECT DISTINCT usuario FROM usuarios WHERE usuario = ?", (usuario,))
+                        cur.execute("SELECT DISTINCT usuario FROM usuarios WHERE usuario = ?", [usuario])
                         records = cur.fetchall()
                         print("Total rows are:  ", len(records))
                         print("Printing each row")
@@ -175,8 +221,9 @@ def signup():
                             cur.close()
                         else:
                             print("Entro al else")
-                            cur.execute("INSERT into usuarios (usuario,nombre,password,correo,telefono,date,link_user,rol) values (?,?,?,?,?,?,?,?)",(usuario,nombre,password,correo,telefono,date,link_user,rol))
+                            cur.execute("INSERT into usuarios (usuario,nombre,password,correo,telefono,date,link_user,rol) values (?,?,?,?,?,?,?,?)",[usuario,nombre,clavehash,correo,telefono,date,link_user,rol])
                             con.commit()
+                            session["usuario"] = usuario 
                             return redirect('main')        
 
                     except sqlite3.Error as error:
@@ -192,60 +239,81 @@ def signup():
 
 @app.route('/view')
 def view():
-    con = sqlite3.connect("BaseDatos.db")
-    con.row_factory = sqlite3.Row
-    cur = con.cursor()
-    cur.execute("SELECT * FROM usuarios")
-    rows = cur.fetchall()
-    con.close()
-    return render_template("view.html", rows=rows)
-    
+    if "usuario" in session:
+        con = sqlite3.connect("BaseDatos.db")
+        con.row_factory = sqlite3.Row
+        cur = con.cursor()
+        cur.execute("SELECT * FROM usuarios")
+        rows = cur.fetchall()
+        con.close()
+        return render_template("view.html", rows=rows)
+    else:
+        return redirect('login')
 
 @app.route("/delete", methods=["GET","POST"])
 def delete():
-    delete_form= Delete_Form()
-    if request.method=="POST":
-        if delete_form.is_submitted():
-            print("submitted")
-            if delete_form.deletebtn.data and delete_form.validate():
-                userid = delete_form.userid.data
-                print(userid)
-                con = sqlite3.connect("BaseDatos.db")
-                try:
-                    cur=con.cursor()
-                    cur.execute("DELETE FROM usuarios where id = ?", (userid,))
-                    con.commit()
-                    msg = "Registro eliminado exitosamente"
-                except:
-                    con.rollback()  
-                    msg = "No se pudo eliminar el registro"
-                finally:
-                    con.close() 
-                    return redirect('view')              
+    if "usuario" in session:
+        delete_form= Delete_Form()
+        if request.method=="POST":
+            if delete_form.is_submitted():
+                print("submitted")
+                if delete_form.deletebtn.data and delete_form.validate():
+                    userid = delete_form.userid.data
+                    print(userid)
+                    con = sqlite3.connect("BaseDatos.db")
+                    try:
+                        cur=con.cursor()
+                        cur.execute("DELETE FROM usuarios where id = ?", (userid,))
+                        con.commit()
+                        msg = "Registro eliminado exitosamente"
+                    except:
+                        con.rollback()  
+                        msg = "No se pudo eliminar el registro"
+                    finally:
+                        con.close() 
+                        return redirect('view')              
 
-    return render_template('delete.html',delete_form=delete_form)
-
+        return render_template('delete.html',delete_form=delete_form)
+    
+    else:
+        return redirect('login')
 
 @app.route('/add')
 def add():
-    return render_template('add.html')
+    if "usuario" in session:
+        return render_template('add.html')
+    else:
+        return redirect('login')
 
 @app.route('/main')
 def main():
-    return render_template('main.html')
+    
+    if "usuario" in session:
+        return render_template('main.html')
+    else:
+        return redirect('login')
 
 @app.route('/search')
 def search():
-    return render_template('search.html')  
+    
+    if "usuario" in session:
+        return render_template('search.html')
+    else:
+        return redirect('login')
 
 @app.route('/edit')
 def edit():
-    return render_template('edit.html')    
-
+    if "usuario" in session:
+        return render_template('edit.html')
+    else:
+        return redirect('login')
 
 @app.route('/admin')
 def admin():
-    return render_template('admin.html')       
+    if "usuario" in session:
+        return render_template('admin.html')
+    else:
+        return redirect('login') 
 
 if __name__=="__main__":
     app.run(debug=True)   

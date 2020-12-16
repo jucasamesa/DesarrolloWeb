@@ -15,13 +15,13 @@
         <td><img src="../static/Images/logo.png" width="400" height="400" alt=""/></td>
         <td><form novalidate method="POST" action="{{url_for('login')}}">
           {{login_form.csrf_token}}
-          <p>Usuario<br>{{login_form.username}}</p>
+          <p>Usuario<br>{{login_form.username | safe}}</p>
           <p style="color: red; font-size: 12px;">
             {% for error in login_form.username.errors %}
             {{ error }}
             {% endfor %}
             </p>
-          <p>Contraseña<br>{{login_form.password}}</p>
+          <p>Contraseña<br>{{login_form.password | safe}}</p>
           <p style="color: red; font-size: 12px;">
             {% for error in login_form.password.errors %}
             {{ error }}
