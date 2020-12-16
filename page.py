@@ -16,7 +16,6 @@ class Login_Form(FlaskForm):
     password=PasswordField('password',validators=[InputRequired(message="Campo Requerido")])
     loginbtn=SubmitField('Ingresar')
     
-
 class Register_Form(FlaskForm):
     signupbtn=SubmitField('Registrarse')
     forgotbtn=SubmitField('Recuperar Password')
@@ -27,7 +26,7 @@ class Signup_Form(FlaskForm):
     password=PasswordField('password',validators=[validators.Length(min=6, max=50,message="Debe tener más de 6 caracteres"),validators.DataRequired(message="Campo Requerido"), validators.EqualTo('repassword', message='Contraseña no son Iguales')])
     repassword=PasswordField('repassword')
     email=EmailField('email',validators=[validators.DataRequired(message="Campo Requerido")])
-    telefono=TelField('telefono',validators=[validators.DataRequired(message="Campo Requerido"),validators.Length(min=10, max=10,message="Debe tener más de 6 caracteres")])
+    telefono=TelField('telefono',validators=[validators.DataRequired(message="Campo Requerido"),validators.Length(min=10, max=10,message="Debe tener diez dígitos")])
     born= DateField('Naciemiento',validators=[validators.DataRequired(message="Campo Requerido")],format='%Y-%m-%d')
     nextbtn= SubmitField('Siguiente')
 
@@ -88,17 +87,38 @@ def login():
                     
                     if usuario =="" or contraseña=="":
                         flash("Verifique campos ingresados")
+                    
+                    if usuario !="" and contraseña !="":
+                        
+                        try:
+                            con = sqlite3.connect('BaseDatos.db')
+                            cur = con.cursor()
+                            print("Connected to SQLite")
 
-                    if usuario =="prueba" and contraseña=="prueba1234":
-                        return redirect('main')
-                    elif usuario =="admin" and contraseña=="admin":
-                        return redirect('admin') 
-
+                            cur.execute("SELECT password FROM usuarios WHERE usuario = '" + usuario + "' ")
+                            records = cur.fetchall()
+                            print("Total rows are:  ", len(records))
+                            print("Printing each row")
+                            for row in records:
+                                print("password: ", row[0])
+                                temp = row[0]
+                                
+                            if temp == contraseña:
+                                return redirect('main') 
+                            
+                            cur.close()
+                        
+                        except sqlite3.Error as error:
+                            print("Failed to read data from table", error)
+                        finally:
+                            if (con):
+                                con.close()
+                                print("The Sqlite connection is closed")
+                       
                     else:
                         flash("Usuario o contraseña invalidos")    
-                
-                       
-           
+                                     
+         
         return render_template('login.html',login_form = login_form, register_form=register_form)         
 
     except:
@@ -131,11 +151,8 @@ def signup():
     signup_form = Signup_Form()
     try:
         if request.method=="POST":
-            
             if signup_form.is_submitted():
-                
                 if signup_form.nextbtn.data and signup_form.validate(): 
-                       
                     try:
                         usuario = signup_form.username.data
                         nombre = signup_form.username.data
@@ -146,17 +163,36 @@ def signup():
                         link_user = "link"
                         rol = "usuario"
                         
-                        con = sqlite3.connect("BaseDatos.db")
-                        cur = con.cursor(prepared=True)
-                        cur.execute("INSERT into usuarios (usuario,nombre,password,correo,telefono,date,link_user,rol) values (?,?,?,?,?,?,?,?)",(usuario,nombre,password,correo,telefono,date,link_user,rol))
-                        con.commit()
-                    except:
-                        con.rollback()  
-                    finally:
-                        con.close()
-                        return redirect('main')
-                          
+                        con = sqlite3.connect('BaseDatos.db')
+                        cur = con.cursor()
+                        print("Connected to SQLite")
 
+                        cur.execute("SELECT DISTINCT usuario FROM usuarios WHERE usuario = '"+usuario+"'")
+                        records = cur.fetchall()
+                        print("Total rows are:  ", len(records))
+                        print("Printing each row")
+                        temp = ""
+                        for row in records:
+                            print("Usuario: ", row[0])
+                            temp = row[0]
+                            
+                        if temp == usuario:
+                            flash("El usuario ya existe")
+                            cur.close()
+                        else:
+                            print("Entro al else")
+                            cur.execute("INSERT into usuarios (usuario,nombre,password,correo,telefono,date,link_user,rol) values (?,?,?,?,?,?,?,?)",(usuario,nombre,password,correo,telefono,date,link_user,rol))
+                            con.commit()
+                            return redirect('main')        
+
+                    except sqlite3.Error as error:
+                        print("Failed to read data from table", error)
+                    
+                    finally:
+                        if (con):
+                            con.close()
+                            print("The Sqlite connection is closed")   
+                    
         return render_template('signup.html',signup_form=signup_form)
     except:render_template('signup.html',signup_form=signup_form)
 
