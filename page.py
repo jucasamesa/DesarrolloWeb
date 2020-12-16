@@ -104,14 +104,16 @@ def login():
                                     print("rol: ", row[1])
                                     temp = row[0]
                                     rol = row[1]
+                                    
                                     print(check_password_hash(temp,password))
                                 
                                 if check_password_hash(temp,password) is True:
                                 
-                                    session["usuario"] = usuario 
                                     if rol == "admin":
+                                        session["admin"] = usuario 
                                         return redirect('admin')
                                     else:
+                                        session["usuario"] = usuario 
                                         return redirect('main') 
                                     cur.close()                            
 
@@ -160,7 +162,7 @@ def signup():
                 if signup_form.nextbtn.data and signup_form.validate(): 
                     try:
                         usuario = signup_form.username.data
-                        nombre = signup_form.username.data
+                        nombre = signup_form.name.data
                         password = signup_form.password.data
                         clavehash = generate_password_hash(password)
                         correo = signup_form.email.data
@@ -205,7 +207,7 @@ def signup():
 
 @app.route('/view')
 def view():
-    if "usuario" in session:
+    if "admin" in session:
         con = sqlite3.connect("BaseDatos.db")
         con.row_factory = sqlite3.Row
         cur = con.cursor()
@@ -218,7 +220,7 @@ def view():
 
 @app.route("/delete", methods=["GET","POST"])
 def delete():
-    if "usuario" in session:
+    if "admin" in session:
         delete_form= Delete_Form()
         if request.method=="POST":
             if delete_form.is_submitted():
@@ -229,7 +231,7 @@ def delete():
                     con = sqlite3.connect("BaseDatos.db")
                     try:
                         cur=con.cursor()
-                        cur.execute("DELETE FROM usuarios where id = ?", (userid,))
+                        cur.execute("DELETE FROM usuarios where id = ?", [userid])
                         con.commit()
                         msg = "Registro eliminado exitosamente"
                     except:
@@ -276,10 +278,15 @@ def edit():
 
 @app.route('/admin')
 def admin():
-    if "usuario" in session:
+    if "admin" in session:
         return render_template('admin.html')
     else:
         return redirect('login') 
+
+@app.route('/logout')
+def logout():
+    session.pop("usuario",None)
+    return redirect('login') 
 
 if __name__=="__main__":
     app.run(debug=True)   
