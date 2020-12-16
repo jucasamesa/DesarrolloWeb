@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Eliminacion de Registros</title>
+<link href="../static/css/templates.css" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,300&display=swap" rel="stylesheet">	
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="shortcut icon" href="../static/Images/favicon.ico">
+
+<style>
+.styled-table {
+    border-collapse: collapse;
+    margin: 25px 0 ;
+    margin-left: 30px;
+    font-size: 0.9em ;
+    min-width: 400px ¡;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    font-family: 'Roboto';
+}
+
+.styled-table thead tr {
+    background-color: #27BBA5;
+    color: white;
+    text-align: left;
+    font-family: 'Bebas Neue';
+}
+
+.styled-table th,
+.styled-table td {
+    padding: 12px 15px;
+}
+
+.styled-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.styled-table tbody tr:last-of-type {
+    border-bottom: 2px solid #27BBA5;
+}
+
+.styled-table tbody tr.active-row {
+    font-weight: bold;
+    color: #27BBA5;
+}
+
+</style>
+
+
+
+</head>
+    
+
+
+<body>
+	<div class="main-container">
+	
+  <div class="user-container">
+    <div>
+      <div class="container"><img id="imgperfil" src="../static/Images/logo.png" width="200" height="200" alt="" class="imgRedonda"/>
+        <h3 style="color:#27BBA5">Administrador</h3>
+      </div>
+    </div>
+    <div class="user--menu">
+      <a href="{{url_for('view')}}"><i class="material-icons">home</i>Listar Usuarios</a><br>
+     <br> 
+     <a href="{{url_for('signup')}}"><i class="material-icons">add_circle</i> Agregar Usuario</a><br>
+		<br> 
+    <a href="{{url_for('delete')}}"><i class="material-icons">image_search</i> Eliminar Usuario</a><br>
+      <br> 
+        
+      <br>
+      <a href="#"><i class="material-icons" style="
+		  padding-top: 130px">settings</i> Configuración</a><br><br> 
+      <a href="{{url_for('login')}}"><i class="material-icons">exit_to_app</i> Cerrar Sesión</a><br>
+    </div>
+  </div>
+  
+  <div class="main-feed">
+    <h1 style="font-size: 30px; text-align: left; color: rgb(112, 112, 112); margin-left: 30px;"> Información de Usuarios</h1>
+       <table class="styled-table">
+    <thead>
+        <tr>
+        <th>ID</th>
+        <th>Usuario</th>
+        <th>Nombre</th>
+        <th>Correo</th>
+        <th>Telefono</th>
+        <th>Fecha</th>
+        <th>Link Foto de Perfil</th></tr>
+    </thead>
+    {% for row in rows %}
+        <tr>
+            <td>{{row["id"]}}</td>
+            <td>{{row["usuario"]}}</td>
+            <td>{{row["nombre"]}}</td>
+            <td>{{row["correo"]}}</td>
+            <td>{{row["telefono"]}}</td>
+            <td>{{row["date"]}}</td>
+            <td>{{row["link_user"]}}</td>
+        </tr>   
+    {% endfor %}   
+</table>
+
+    </div>
+</div>
+</body>
+</html>
+
+
+
+
