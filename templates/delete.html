@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Eliminacion de Registros</title>
+<link href="../static/css/templates.css" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,300&display=swap" rel="stylesheet">	
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="shortcut icon" href="../static/Images/favicon.ico">
+</head>
+    
+<body>
+	<div class="main-container">
+	
+  <div class="user-container">
+    <div>
+      <div class="container"><img id="imgperfil" src="../static/Images/logo.png" width="200" height="200" alt="" class="imgRedonda"/>
+        <h3 style="color:#27BBA5">Administrador</h3>
+      </div>
+    </div>
+    <div class="user--menu">
+      <a href="{{url_for('view')}}"><i class="material-icons">home</i>Listar Usuarios</a><br>
+     <br> 
+	 <a href="{{url_for('delete')}}"><i class="material-icons">image_search</i> Eliminar Usuario</a><br>
+		<br> 
+      <a href="{{url_for('signup')}}"><i class="material-icons">add_circle</i> Agregar Usuario</a><br><br> 
+        
+      <br>
+      <a href="{{url_for('configuracion')}}"><i class="material-icons" style="
+		  padding-top: 130px">settings</i> Configuración</a><br><br> 
+      <a href="{{url_for('logout')}}"><i class="material-icons">exit_to_app</i> Cerrar Sesión</a><br>
+    </div>
+  </div>
+  
+  <div class="main-feed">
+    <h1 style="font-size: 30px; text-align: left; color: rgb(112, 112, 112); margin-left: 30px;"> Eliminar Usuario</h1>
+       <form novalidate style="margin-left: 30px" method="POST" action="{{url_for('delete')}}">
+          {{delete_form.csrf_token}}
+          Id del Usuario {{delete_form.userid}}
+          {{delete_form.deletebtn(class_="Button2")}}
+          <p style="color: red; font-size: 12px;">
+            {% for error in delete_form.userid.errors %}
+            {{ error }}
+            {% endfor %}
+            </p>
+      </form>
+    </div>
+</div>
+</body>
+</html>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    

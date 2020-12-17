@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>SocialNetwork</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+<link href="../static/css/templates.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+  <section>
+  <div class="center">
+  <table width="900" border="0" align="center">
+    <tbody>
+      <tr>
+        <td><img src="../static/Images/logo.png" width="400" height="400" alt=""/></td>
+        <td><form method="POST" action="{{url_for('forgot')}}"><p>Escriba el Usuario para reestablecer la contraseña</p>
+		  <p align="center">Usuario <br><input type="text" id="email" name="email"></p>
+          <p align="center"><input type="submit" class="Button2" id="btnforgot" name="btnforgot" value="Recuperar">
+          <input type="submit" class="Button1" id="btnback" name="btnforgot" value="Ingresar"></p>
+      </form>
+      <section class="content" style="text-align: center; color: green;">
+        {% for message in get_flashed_messages() %}
+        <div class="flash">{{ message }}</div>
+        {% endfor %}
+      </section>  
+          
+    </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</section>
+
+<footer id="footer" align="center">Photogram, Derechos reservados ® 2020 </footer>
+</body>
+</html>

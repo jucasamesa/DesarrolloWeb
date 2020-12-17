@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>main</title>
+<link href="../static/css/templates.css" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,300&display=swap" rel="stylesheet">	
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+</head>
+
+<body>
+	
+<div class="main-container">
+	
+  <div class="user-container">
+    <div>
+      <div class="container"><img id="imgperfil" src="../static/Images/logo.png" width="200" height="200" alt="" class="imgRedonda"/>
+        <h3 style="color:#27BBA5">Paula Aguilera</h3>
+      </div>
+    </div>
+    <div class="user--menu">
+      <a href="{{url_for('main')}}"><i class="material-icons">home</i>Inicio</a><br>
+     <br> 
+	 <a href="{{url_for('search')}}"><i class="material-icons">image_search</i> Buscar Foto</a><br>
+		<br> 
+      <a href="{{url_for('add')}}"><i class="material-icons">add_circle</i> Agregar Foto</a><br><br> 
+      
+      <a href="{{url_for('edit')}}"><i class="material-icons">brush</i> Editar Foto</a><br><br> 
+      <br>
+      <a href="{{url_for('configuracion')}}"><i class="material-icons" style="
+		  padding-top: 130px">settings</i> Configuración</a><br><br> 
+      <a href="{{url_for('logout')}}"><i class="material-icons">exit_to_app</i> Cerrar Sesión</a><br>
+    </div>
+  </div>
+  
+  <div class="main-feed">
+    
+    <ul class="galeria">
+      <li>
+        <a href=""><img src="../static/Images/nombredeusuario-1122020-0847.jpg"></a>
+        <h2>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam voluptates accusamus iure deleniti beatae, fuga cum ex nesciunt tempore voluptas nemo, cumque veniam saepe provident!<i class="material-icons" style="font-size: 15px; top: 3px; margin-left: 5px" >edit</i></h2>  
+        <h3>Categoría: Lorem ipsum. <i class="material-icons" style="font-size: 20px; top: 3px; margin-left: 5px" >edit</i></h3> 
+		<input type="checkbox"> Privado <i class="material-icons" style="font-size: 22px;padding-left: 20px; top: 3px; margin-left: 5px;color: red" >delete</i>
+		 
+		  
+        
+        </li>
+      <li>
+        <a href=""><img src="../static/Images/nombredeusuario-1122020-0848.jpg"></a>
+        <h2>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam voluptates accusamus iure deleniti beatae, fuga cum ex nesciunt tempore voluptas nemo, cumque veniam saepe provident!<i class="material-icons" style="font-size: 15px; top: 3px; margin-left: 5px" >edit</i></h2>  
+        <h3>Categoría: Lorem ipsum. <i class="material-icons" style="font-size: 20px; top: 3px; margin-left: 5px" >edit</i></h3> 
+		<input type="checkbox"> Privado <i class="material-icons" style="font-size: 22px;padding-left: 20px; top: 3px; margin-left: 5px;color: red" >delete</i>
+	    </li>
+      <li>
+        <a href=""><img src="../static/Images/nombredeusuario-1122020-0849.jpg"></a>
+        
+        <h2>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam voluptates accusamus iure deleniti beatae, fuga cum ex nesciunt tempore voluptas nemo, cumque veniam saepe provident!<i class="material-icons" style="font-size: 15px; top: 3px; margin-left: 5px" >edit</i></h2>  
+        <h3>Categoría: Lorem ipsum. <i class="material-icons" style="font-size: 20px; top: 3px; margin-left: 5px" >edit</i></h3> 
+		<input type="checkbox"> Privado <i class="material-icons" style="font-size: 22px;padding-left: 20px; top: 3px; margin-left: 5px;color: red" >delete</i>
+        </li>
+      <li>
+        <a href=""><img src="../static/Images/nombredeusuario-1122020-0850.jpg"></a>
+        <h2>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam voluptates accusamus iure deleniti beatae, fuga cum ex nesciunt tempore voluptas nemo, cumque veniam saepe provident!<i class="material-icons" style="font-size: 15px; top: 3px; margin-left: 5px" >edit</i></h2>  
+        <h3>Categoría: Lorem ipsum. <i class="material-icons" style="font-size: 20px; top: 3px; margin-left: 5px" >edit</i></h3> 
+		<input type="checkbox"> Privado <i class="material-icons" style="font-size: 22px;padding-left: 20px; top: 3px; margin-left: 5px;color: red" >delete</i>
+        </li>
+      <li>
+        <a href=""><img src="../static/Images/nombredeusuario-1122020-0851.jpg"></a>
+        <h2>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam voluptates accusamus iure deleniti beatae, fuga cum ex nesciunt tempore voluptas nemo, cumque veniam saepe provident!<i class="material-icons" style="font-size: 15px; top: 3px; margin-left: 5px" >edit</i></h2>  
+        <h3>Categoría: Lorem ipsum. <i class="material-icons" style="font-size: 20px; top: 3px; margin-left: 5px" >edit</i></h3> 
+		<input type="checkbox"> Privado <i class="material-icons" style="font-size: 22px;padding-left: 20px; top: 3px; margin-left: 5px;color: red" >delete</i>
+        </li>
+      </ul>
+    </div>
+</div>
+	
+	
+	
+	
+</body>
+</html>

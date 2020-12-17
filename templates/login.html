@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>SocialNetwork</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+<link href="../static/css/templates.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+  <section>
+<div class="center">
+  <table width="900" border="0" align="center">
+    <tbody>
+      <tr>
+        <td><img src="../static/Images/logo.png" width="400" height="400" alt=""/></td>
+        <td><form novalidate method="POST" action="{{url_for('login')}}">
+          {{login_form.csrf_token}}
+          <p>Usuario<br>{{login_form.username | safe}}</p>
+          <p style="color: red; font-size: 12px;">
+            {% for error in login_form.username.errors %}
+            {{ error }}
+            {% endfor %}
+            </p>
+          <p>Contraseña<br>{{login_form.password | safe}}</p>
+          <p style="color: red; font-size: 12px;">
+            {% for error in login_form.password.errors %}
+            {{ error }}
+            {% endfor %}
+            </p>
+          
+          <p align="center" style="margin-left: -2.5cm;">{{login_form.loginbtn(class_="Button2")}}</p></form>
+          
+          <form method="POST" action="{{url_for('register')}}">
+          <p align="center"style="margin-left: -2.5cm;">{{register_form.signupbtn(class_="Button2")}}</p>
+          <p align="center"style="margin-left: -2.5cm;">{{register_form.forgotbtn(class_="Button2")}}</p></form>
+    
+      <section class="content" style="text-align: center; color: red;">
+        {% for message in get_flashed_messages() %}
+        <div class="flash">{{ message }}</div>
+        {% endfor %}
+      </section>  
+    
+    </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</section>
+
+<footer id="footer" align="center">Photogram, Derechos reservados ® 2020 </footer>
+</body>
+</html>
