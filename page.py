@@ -306,15 +306,18 @@ def configuracion():
         cur = con.cursor()
         print("Connected to SQLite")
         
-        cur.execute("SELECT nombre,correo,telefono,date FROM usuarios WHERE usuario = ? ",[session['usuario']])
+        if "admin" in session:
+            cur.execute("SELECT nombre,correo,telefono,date FROM usuarios WHERE usuario = ? ",[session['admin']])
+        if "usuario" in session:
+            cur.execute("SELECT nombre,correo,telefono,date FROM usuarios WHERE usuario = ? ",[session['usuario']])
+        
         records = cur.fetchall()
         size = len(records)
         print("Total rows are:  ", size)
         print("Printing each row")
-        
-        
+                
         for row in records:
-           
+        
             nombre = row[0]
             correo=row[1]
             telefono=row[2]
@@ -330,11 +333,8 @@ def configuracion():
         if (con):
             con.close()
             print("The Sqlite connection is closed")
-           
-    return render_template('configuracion.html',configuracion_form=configuracion_form)     
-
-     
-    
+        
+    return render_template('configuracion.html',configuracion_form=configuracion_form)         
 
 @app.route('/update',methods=["GET","POST"])
 def update():
