@@ -54,22 +54,21 @@ button {
 .Button1{
 	background-color: #6F6F6F;
     font-family: 'Bebas Neue', cursive;
-    color: white !important;;
-	
+    color: white !important;	
 }
 
 .Button2{
 	background-color: #27BBA5;
     font-family: 'Bebas Neue', cursive;
-    font-size: 20px;
-    color: white !important;
-	
+    color: white !important
 }
 
 .wtfform{
     font-family: 'Bebas Neue', cursive;
     color: red !important;
 }
+
+
 
 
 .centered {
@@ -102,9 +101,8 @@ button {
 }
 
 
-
 .main-feed {
-    width: 85%;
+    width: auto;
     height: 840px;
     margin: 5px;
     border-width: 2px;

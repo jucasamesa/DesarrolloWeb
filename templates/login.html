@@ -13,25 +13,26 @@
     <tbody>
       <tr>
         <td><img src="../static/Images/logo.png" width="400" height="400" alt=""/></td>
-        <td><form method="POST" action="{{url_for('login')}}">
+        <td><form novalidate method="POST" action="{{url_for('login')}}">
           {{login_form.csrf_token}}
-          <p align="center">Usuario<br>{{login_form.username}}</p>
-          <ul>
+          <p>Usuario<br>{{login_form.username | safe}}</p>
+          <p style="color: red; font-size: 12px;">
             {% for error in login_form.username.errors %}
-            {{ error }}</li>
+            {{ error }}
             {% endfor %}
-          </ul>
-          <p align="center">Contraseña<br>{{login_form.password}}</p>
-          <ul>
+            </p>
+          <p>Contraseña<br>{{login_form.password | safe}}</p>
+          <p style="color: red; font-size: 12px;">
             {% for error in login_form.password.errors %}
-            <li class="wtferror">{{ error }}</li>
+            {{ error }}
             {% endfor %}
-          </ul> 
-          <p align="center">{{login_form.loginbtn(class_="Button2")}}</p></form>
-
+            </p>
+          
+          <p align="center" style="margin-left: -2.5cm;">{{login_form.loginbtn(class_="Button2")}}</p></form>
+          
           <form method="POST" action="{{url_for('register')}}">
-          <p align="center">{{register_form.signupbtn(class_="Button2")}}</p>
-          <p align="center">{{register_form.forgotbtn(class_="Button2")}}</p></form>
+          <p align="center"style="margin-left: -2.5cm;">{{register_form.signupbtn(class_="Button2")}}</p>
+          <p align="center"style="margin-left: -2.5cm;">{{register_form.forgotbtn(class_="Button2")}}</p></form>
     
       <section class="content" style="text-align: center; color: red;">
         {% for message in get_flashed_messages() %}
