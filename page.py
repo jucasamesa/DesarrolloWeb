@@ -83,6 +83,10 @@ def forgot():
 
     return render_template('forgot.html')
 
+# Para acceder como administrador ingrese:
+# usuario: administrador
+# password: 123456
+
 @app.route('/login',methods=["GET","POST"])
 def login():
     login_form = Login_Form()
