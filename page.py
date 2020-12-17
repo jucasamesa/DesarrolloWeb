@@ -296,7 +296,7 @@ def logout():
 
 @app.route('/configuracion')
 def configuracion():
-    
+    #comentario
     try:
         con = sqlite3.connect('BaseDatos.db')
         cur = con.cursor()
@@ -307,7 +307,6 @@ def configuracion():
         size = len(records)
         print("Total rows are:  ", size)
         print("Printing each row")
-        
         
         for row in records:
            
@@ -328,10 +327,7 @@ def configuracion():
             print("The Sqlite connection is closed")
            
     return render_template('configuracion.html',configuracion_form=configuracion_form)     
-
      
-    
-
 @app.route('/update',methods=["GET","POST"])
 def update():
     
